@@ -15,7 +15,7 @@ Business phone, email, services, hours, towns, and family story: https://www.csp
 
 Project photos supplied by the user in before/after order:
 - `23605.jpg` → `trim-before.webp`; `23606.jpg` → `trim-after.webp`.
-- `23608.jpg` → `house-before.webp`; `23603.jpg` → `house-after.webp`. Matching front elevation, displayed side by side. The user supplied the corrected before photo to replace the earlier rear elevation.
+- `23608.jpg` → `house-before.webp`; `23603.jpg` → `house-after.webp`. Matching front elevation, featured in the opening animated comparison only. The user supplied the corrected before photo to replace the earlier rear elevation.
 - `23607.jpg` → `shop-comparison.webp`. Original collage preserved, including its branding.
 - `clearwater.webp`: service-area photograph from the original site's About page.
 Images are resized/compressed only; no invented project results, reviews, ratings, or locations. Existing stock/generated worker images were not reused. Header is a typographic CS treatment based on supplied brand colors; replace with the official vector logo when available.
