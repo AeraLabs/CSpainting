@@ -29,3 +29,36 @@ if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion
  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}}),{threshold:.08});
  document.querySelectorAll('.reveal').forEach(element=>observer.observe(element));
 }
+
+// The hero plays once when visible; it never loops or runs off-screen.
+(() => {
+ const stage=document.querySelector('.transformation');
+ if(!stage)return;
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const controls=stage.querySelector('.transformation-controls');
+ const replay=stage.querySelector('.replay-reveal');
+ const caption=stage.querySelector('.finish-caption');
+ const views=[...stage.querySelectorAll('[data-hero-view]')];
+ let frame=0,progress=1,elapsed=0,lastTime=0,started=false,visible=false,ready=false;
+ const duration=4200;
+ function state(value){stage.dataset.state=value;caption.textContent=value==='before'?'CLEANED. PREPPED.':value==='after'?'THE FINISHED LOOK':'THE FINISH COMES TO LIFE';views.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.heroView===value)));replay.innerHTML=value==='playing'?'Pause reveal <span aria-hidden="true">Ⅱ</span>':value==='paused'?'Resume reveal <span aria-hidden="true">▷</span>':'Replay reveal <span aria-hidden="true">↻</span>';}
+ function draw(value){progress=value;stage.style.setProperty('--reveal',`${value*100}%`);}
+ function stop(){cancelAnimationFrame(frame);frame=0;lastTime=0;}
+ function finish(view){stop();draw(view==='after'?1:0);state(view);}
+ function tick(now){if(lastTime)elapsed+=now-lastTime;lastTime=now;const t=Math.min(elapsed/duration,1);const eased=t*t*(3-2*t);draw(eased);if(t<1)frame=requestAnimationFrame(tick);else finish('after');}
+ function play(resume=false){if(!ready)return;stop();started=true;if(reduced.matches){finish('after');return;}if(!resume){elapsed=0;draw(0);}state('playing');frame=requestAnimationFrame(tick);}
+ function pause(){if(stage.dataset.state==='playing'){stop();state('paused');}}
+ replay.addEventListener('click',()=>{if(stage.dataset.state==='playing')pause();else play(stage.dataset.state==='paused');});
+ views.forEach(button=>button.addEventListener('click',()=>{started=true;finish(button.dataset.heroView);}));
+ function maybeStart(){if(ready&&visible&&!started&&!reduced.matches&&!document.hidden)play();}
+ const observer='IntersectionObserver' in window?new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)pause();else maybeStart();},{threshold:.3}):null;
+ if(observer)observer.observe(stage);else visible=true;
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();else maybeStart();});
+ reduced.addEventListener('change',()=>{if(reduced.matches)finish('after');replay.hidden=reduced.matches;});
+ Promise.all([...stage.querySelectorAll('img')].map(img=>img.decode().catch(()=>null))).then(()=>{
+  const images=[...stage.querySelectorAll('img')];
+  if(images.some(img=>!img.naturalWidth))return;
+  ready=true;controls.hidden=false;replay.hidden=reduced.matches;
+  if(!reduced.matches&&!started){draw(0);state('before');}maybeStart();
+ });
+})();

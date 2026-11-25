@@ -3,6 +3,7 @@
 Mobile-first, dependency-free marketing site for CS Painting & Powerwashing LLC in Orofino, Idaho. All deployable files live in `dist/`. No build step or paid assets required.
 
 ## Features
+- Signature hero roller reveal using the real exterior before/after pair. Plays once when visible, with pause/resume, replay and instant photo selection. Stops off-screen and on hidden tabs; reduced-motion users receive still images and manual before/after buttons. No additional libraries or image downloads.
 - Responsive layouts, locally hosted fonts, optimized WebP photos, lazy loading.
 - Real project gallery, keyboard/touch before-and-after slider, accessible native photo dialog.
 - Expandable services, service-to-estimate preselection, click-to-call and SMS links.
