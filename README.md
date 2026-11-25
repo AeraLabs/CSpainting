@@ -28,3 +28,7 @@ Serve `dist/` with any static server (e.g. `python3 -m http.server 8000 --direct
 
 ## Verification
 Run `node --check dist/app.js`. Browser checks cover comparison keyboard controls, full-image dialog open/close, service accordion and estimate preselection. The estimate flow opens the visitor's email client; no message was sent during verification.
+
+## GitHub Pages branch deployment
+
+Pages also works with **Deploy from a branch → main → / (root)**. The root `index.html` is generated from `dist/index.html` and references assets under `dist/`. `.nojekyll` prevents Jekyll from rendering the README as the homepage. After editing `dist/index.html`, run `python3 scripts/sync-pages-root.py` and commit the updated root page. The existing Actions deployment still serves `dist/` directly.
